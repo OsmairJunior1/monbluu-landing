@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Política de Privacidade MonBluu — Saiba como tratamos seus dados pessoais.">
+    <title>Política de Privacidade — MonBluu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+        html{scroll-behavior:smooth;font-size:16px;}
+        body{font-family:'Inter',sans-serif;background:#fff;color:#1a2235;line-height:1.6;overflow-x:hidden;}
+        a{text-decoration:none;}
+
+        :root{
+          --ink:      #0f1b35;
+          --ink-2:    #3d4f6e;
+          --ink-3:    #6b7c99;
+          --blue:     #1855f4;
+          --blue-lt:  #eef2ff;
+          --blue-md:  #c7d4fd;
+          --green:    #17c964;
+          --green-lt: #e8faf0;
+          --green-dk: #0fa554;
+          --surface:  #f7f8fc;
+          --border:   #e4e9f4;
+          --white:    #ffffff;
+          --r8:8px;--r12:12px;--r16:16px;--r24:24px;--rpill:100px;
+          --sh-sm: 0 1px 4px rgba(15,27,53,.06),0 4px 16px rgba(15,27,53,.06);
+          --sh-md: 0 4px 8px rgba(15,27,53,.06),0 12px 40px rgba(15,27,53,.1);
+          --t:.22s cubic-bezier(.4,0,.2,1);
+        }
+
+        /* ── SCROLL PROGRESS ── */
+        #prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--blue),var(--green));z-index:9999;transition:width .08s linear;}
+
+        /* ── HEADER ── */
+        .nav{
+          position:sticky;top:0;z-index:900;
+          background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+          border-bottom:1px solid var(--border);
+          box-shadow:var(--sh-sm);
+        }
+        .nav-inner{
+          max-width:1200px;margin:0 auto;padding:0 24px;
+          display:flex;align-items:center;justify-content:space-between;
+          height:68px;gap:24px;
+        }
+        .nav-logo img{height:36px;display:block;filter:brightness(0) saturate(100%) invert(13%) sepia(65%) saturate(900%) hue-rotate(200deg) brightness(0.85);}
+        .back-link{
+          display:inline-flex;align-items:center;gap:7px;
+          font-size:.875rem;font-weight:600;color:var(--ink-2);
+          border:1.5px solid var(--border);border-radius:var(--r8);
+          padding:8px 16px;transition:all var(--t);
+        }
+        .back-link:hover{color:var(--blue);border-color:var(--blue);background:var(--blue-lt);}
+        .back-link svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+
+        /* ── PAGE HERO ── */
+        .page-hero{
+          background:linear-gradient(165deg,#f7f9ff 0%,#eef2ff 60%,#f0faf5 100%);
+          padding:64px 24px 56px;
+          text-align:center;position:relative;overflow:hidden;
+          border-bottom:1px solid var(--border);
+        }
+        .page-hero::before{
+          content:'';position:absolute;top:-200px;right:-200px;
+          width:600px;height:600px;border-radius:50%;
+          background:radial-gradient(circle,rgba(24,85,244,.07) 0%,transparent 70%);
+          pointer-events:none;
+        }
+        .page-hero-badge{
+          display:inline-flex;align-items:center;gap:8px;
+          padding:6px 14px;border-radius:var(--rpill);
+          background:#fff;border:1px solid var(--blue-md);
+          font-size:.8rem;font-weight:700;color:var(--blue);
+          letter-spacing:.04em;margin-bottom:18px;
+          box-shadow:0 2px 8px rgba(24,85,244,.1);
+        }
+        .page-hero h1{
+          font-family:'Plus Jakarta Sans',sans-serif;
+          font-size:clamp(1.75rem,4vw,2.75rem);font-weight:800;
+          color:var(--ink);margin-bottom:12px;letter-spacing:-.02em;
+        }
+        .page-hero p{font-size:1rem;color:var(--ink-2);}
+        .updated-badge{
+          display:inline-flex;align-items:center;gap:6px;
+          margin-top:16px;font-size:.8125rem;color:var(--ink-3);
+        }
+        .updated-badge svg{width:14px;height:14px;stroke:var(--ink-3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+        /* ── CONTAINER ── */
+        .content-wrapper{max-width:860px;margin:0 auto;padding:52px 24px 96px;}
+
+        /* Summary card */
+        .summary-card{
+          background:var(--blue-lt);border:1px solid var(--blue-md);
+          border-radius:var(--r16);padding:28px 32px;margin-bottom:48px;
+        }
+        .summary-card h2{
+          font-family:'Plus Jakarta Sans',sans-serif;
+          font-size:.8rem;font-weight:800;color:var(--blue);
+          text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;
+        }
+        .summary-card p{font-size:.9375rem;color:var(--ink-2);line-height:1.75;}
+        .summary-card a{color:var(--blue);font-weight:600;}
+        .summary-card a:hover{text-decoration:underline;}
+
+        /* TOC */
+        .toc{
+          background:var(--surface);border-radius:var(--r16);
+          padding:24px 28px;margin-bottom:48px;border:1px solid var(--border);
+        }
+        .toc h3{
+          font-family:'Plus Jakarta Sans',sans-serif;font-size:.8rem;font-weight:800;
+          color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;
+        }
+        .toc ol{
+          list-style:none;counter-reset:toc-counter;
+          display:grid;grid-template-columns:1fr 1fr;gap:8px 24px;
+        }
+        @media(max-width:560px){.toc ol{grid-template-columns:1fr;}}
+        .toc ol li{counter-increment:toc-counter;}
+        .toc ol li a{
+          display:flex;align-items:center;gap:8px;
+          font-size:.875rem;color:var(--ink-2);transition:color var(--t);
+        }
+        .toc ol li a::before{
+          content:counter(toc-counter,decimal-leading-zero);
+          font-size:.75rem;font-weight:700;color:var(--blue);min-width:24px;
+        }
+        .toc ol li a:hover{color:var(--blue);}
+
+        /* eyebrow line */
+        .eyebrow{
+          display:inline-flex;align-items:center;gap:8px;
+          font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--blue);margin-bottom:16px;
+        }
+        .eyebrow::before{content:'';width:20px;height:2px;background:var(--blue);border-radius:2px;}
+
+        /* Sections */
+        .policy-section{margin-bottom:56px;scroll-margin-top:88px;}
+        .section-header{
+          display:flex;align-items:center;gap:14px;
+          margin-bottom:20px;padding-bottom:16px;
+          border-bottom:1px solid var(--border);
+        }
+        .section-number{
+          min-width:40px;height:40px;
+          background:linear-gradient(135deg,var(--blue),#0e42d4);
+          border-radius:var(--r8);
+          display:flex;align-items:center;justify-content:center;
+          font-family:'Plus Jakarta Sans',sans-serif;font-size:.875rem;font-weight:800;color:#fff;
+          box-shadow:0 4px 12px rgba(24,85,244,.25);
+        }
+        .section-header h2{
+          font-family:'Plus Jakarta Sans',sans-serif;
+          font-size:1.25rem;font-weight:700;color:var(--ink);
+        }
+        .policy-section p{font-size:.9375rem;color:var(--ink-2);margin-bottom:14px;line-height:1.8;}
+        .policy-section strong{color:var(--ink);font-weight:700;}
+        .policy-section ul,.policy-section ol{padding-left:0;list-style:none;margin-bottom:14px;}
+        .policy-section ul li,.policy-section ol li{
+          font-size:.9375rem;color:var(--ink-2);
+          padding:6px 0 6px 20px;position:relative;line-height:1.7;
+        }
+        .policy-section ul li::before{
+          content:'';position:absolute;left:0;top:14px;
+          width:6px;height:6px;background:var(--blue);border-radius:50%;
+        }
+        .policy-section ol{counter-reset:item-counter;}
+        .policy-section ol li{counter-increment:item-counter;}
+        .policy-section ol li::before{
+          content:counter(item-counter)".";
+          position:absolute;left:0;top:6px;
+          font-weight:700;color:var(--blue);font-size:.8125rem;
+        }
+
+        /* Definition list */
+        .definition-item{
+          background:var(--surface);border-radius:var(--r12);
+          padding:16px 20px;margin-bottom:10px;
+          border-left:3px solid var(--blue);
+        }
+        .definition-term{
+          font-family:'Plus Jakarta Sans',sans-serif;font-size:.9375rem;
+          font-weight:700;color:var(--ink);margin-bottom:4px;
+        }
+        .definition-desc{font-size:.875rem;color:var(--ink-2);line-height:1.65;}
+
+        /* Table */
+        .table-wrapper{overflow-x:auto;margin-bottom:20px;border-radius:var(--r12);border:1px solid var(--border);}
+        table{width:100%;border-collapse:collapse;font-size:.875rem;}
+        thead tr{background:var(--blue-lt);}
+        thead th{
+          padding:12px 16px;text-align:left;
+          font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;color:var(--blue);white-space:nowrap;
+        }
+        tbody tr{border-top:1px solid var(--border);}
+        tbody tr:hover{background:var(--surface);}
+        tbody td{padding:12px 16px;color:var(--ink-2);vertical-align:top;}
+        tbody td:first-child{font-weight:600;color:var(--ink);white-space:nowrap;}
+
+        /* Highlight box */
+        .highlight-box{
+          background:var(--green-lt);border:1px solid rgba(15,165,84,.2);
+          border-radius:var(--r12);padding:18px 22px;margin-bottom:14px;
+          display:flex;gap:14px;align-items:flex-start;
+        }
+        .highlight-box .icon{font-size:1.25rem;line-height:1;margin-top:1px;}
+        .highlight-box p{margin:0 !important;font-size:.9rem;color:var(--green-dk) !important;}
+
+        /* DPO card */
+        .dpo-card{
+          background:var(--surface);border-radius:var(--r16);
+          padding:28px 32px;border:1px solid var(--border);
+          display:flex;gap:20px;align-items:flex-start;
+          box-shadow:var(--sh-sm);
+        }
+        .dpo-avatar{
+          width:52px;height:52px;flex-shrink:0;
+          background:linear-gradient(135deg,var(--blue),var(--green-dk));
+          border-radius:50%;display:flex;align-items:center;justify-content:center;
+          font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.125rem;color:#fff;
+        }
+        .dpo-info h3{font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:4px;}
+        .dpo-info p{font-size:.875rem;color:var(--ink-3);margin-bottom:8px !important;}
+        .dpo-info a{
+          display:inline-flex;align-items:center;gap:6px;
+          font-size:.9rem;color:var(--blue);font-weight:600;
+        }
+        .dpo-info a:hover{text-decoration:underline;}
+        .dpo-info a svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+        /* Footer */
+        .page-footer{background:#0a0f1e;border-top:1px solid rgba(255,255,255,.04);padding:32px 24px;text-align:center;}
+        .page-footer p{font-size:.875rem;color:rgba(255,255,255,.3);}
+        .page-footer a{color:rgba(255,255,255,.55);transition:color var(--t);}
+        .page-footer a:hover{color:#fff;}
+
+        /* Back to top */
+        #btt{
+          position:fixed;bottom:24px;right:24px;width:44px;height:44px;border-radius:50%;
+          background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;
+          box-shadow:0 4px 16px rgba(24,85,244,.4);opacity:0;transform:translateY(12px);
+          transition:all var(--t);z-index:990;cursor:pointer;border:none;
+        }
+        #btt.show{opacity:1;transform:translateY(0);}
+        #btt:hover{transform:translateY(-3px);background:#0e42d4;}
+        #btt svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+    </style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<button id="btt" aria-label="Voltar ao topo">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<!-- HEADER -->
+<header class="nav">
+    <div class="nav-inner">
+        <a href="../versao-2.html" class="nav-logo">
+            <img src="../logo branca (1).png" alt="MonBluu">
+        </a>
+        <a href="../versao-2.html" class="back-link">
+            <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+            Voltar ao site
+        </a>
+    </div>
+</header>
+
+<!-- HERO -->
+<section class="page-hero">
+    <div class="page-hero-badge">📄 Documento Legal</div>
+    <h1>Política de Privacidade</h1>
+    <p>Transparência total sobre como tratamos os seus dados pessoais.</p>
+    <div class="updated-badge">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Última atualização: março de 2026 — Revisada anualmente conforme a LGPD
+    </div>
+</section>
+
+<!-- CONTENT -->
+<main class="content-wrapper">
+
+    <div class="summary-card">
+        <h2>Resumo</h2>
+        <p>Esta Política de Privacidade descreve como a <strong>MonBluu</strong> coleta, usa, armazena e compartilha seus dados pessoais, em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018)</strong>. Ao utilizar nossos serviços, você concorda com estas condições. Em caso de dúvidas, entre em contato com nosso DPO: <a href="mailto:dpo@monbluu.com.br">dpo@monbluu.com.br</a>.</p>
+    </div>
+
+    <nav class="toc">
+        <h3>Índice</h3>
+        <ol>
+            <li><a href="#objetivo">Objetivo</a></li>
+            <li><a href="#referencias">Referências</a></li>
+            <li><a href="#abrangencia">Abrangência</a></li>
+            <li><a href="#conceitos">Conceitos</a></li>
+            <li><a href="#agentes">Agentes de Tratamento</a></li>
+            <li><a href="#como-tratamos">Como Tratamos Dados</a></li>
+            <li><a href="#cookies">Cookies e Tecnologias</a></li>
+            <li><a href="#compartilhamento">Compartilhamento</a></li>
+            <li><a href="#seguranca">Segurança das Informações</a></li>
+            <li><a href="#manutencao">Manutenção dos Dados</a></li>
+            <li><a href="#direitos">Direitos dos Titulares</a></li>
+            <li><a href="#atendimento">Atendimento</a></li>
+            <li><a href="#orientacoes">Orientações de Segurança</a></li>
+            <li><a href="#vigencia">Vigência e Validade</a></li>
+        </ol>
+    </nav>
+
+    <section class="policy-section" id="objetivo">
+        <div class="section-header">
+            <div class="section-number">01</div>
+            <h2>Objetivo</h2>
+        </div>
+        <p>Esta Política de Privacidade tem como fundamento a legislação brasileira, especialmente a Lei Geral de Proteção de Dados, Lei 13.709/2018, e suas atualizações. De acordo com a referida Lei, dados pessoais são informações de uma pessoa física que a identifiquem ou que a tornem identificável. Portanto, informações como CPF, RG, localização, endereço, endereço IP, idade, etc. são consideradas dados pessoais.</p>
+        <p>Resumidamente, esta Política visa demonstrar o comprometimento da MonBluu em:</p>
+        <ul>
+            <li>Proteger os direitos dos titulares de dados pessoais;</li>
+            <li>Adotar processos e regras que assegurem o cumprimento, de forma abrangente, de normas e boas práticas relativas à proteção de dados pessoais;</li>
+            <li>Promover a transparência sobre a forma pela qual trata dados pessoais;</li>
+            <li>Adotar medidas de proteção em relação a riscos de incidentes de segurança que envolvam dados pessoais.</li>
+        </ul>
+        <p>Para prestarmos os Serviços ofertados pela MonBluu, os dados pessoais poderão ser coletados, acessados, armazenados e, eventualmente, compartilhados com parceiros.</p>
+        <p>Ao realizar seu cadastro na MonBluu, entendemos que você concorda com as condições indicadas a seguir. Por isso, é importante que você leia, compreenda e, em caso de qualquer dúvida, entre em contato.</p>
+    </section>
+
+    <section class="policy-section" id="referencias">
+        <div class="section-header">
+            <div class="section-number">02</div>
+            <h2>Referências</h2>
+        </div>
+        <ul>
+            <li>Lei 13.709/2018 — Lei Geral de Proteção de Dados Pessoais (LGPD);</li>
+            <li>Regulamentações do Banco Central Brasileiro relacionadas à privacidade e proteção de dados pessoais.</li>
+        </ul>
+    </section>
+
+    <section class="policy-section" id="abrangencia">
+        <div class="section-header">
+            <div class="section-number">03</div>
+            <h2>Abrangência</h2>
+        </div>
+        <p>Esta Política aplica-se a todos os serviços oferecidos pela MonBluu, ora denominados "serviços" ou "aplicações", e se aplica a todos que de alguma forma possuem contato com os serviços, sejam eles clientes (donos de negócio, empresas de Contabilidade ou de BPO Financeiro), além de usuários de sites, apps ou outros recursos de fornecimento de serviços da MonBluu (<strong>"Titulares"</strong>).</p>
+    </section>
+
+    <section class="policy-section" id="conceitos">
+        <div class="section-header">
+            <div class="section-number">04</div>
+            <h2>Conceitos</h2>
+        </div>
+        <div class="definition-list">
+            <div class="definition-item"><div class="definition-term">Controlador</div><div class="definition-desc">Pessoa física ou jurídica, de direito público ou privado, a quem competem as decisões referentes ao tratamento de Dados Pessoais.</div></div>
+            <div class="definition-item"><div class="definition-term">Cookies</div><div class="definition-desc">Pequenos arquivos, contendo informações sobre o acesso do usuário e que são baixados para o dispositivo no momento da visita ao site. Estes arquivos permitem ao site reconhecer o equipamento e registrar a interação do usuário, proporcionando funcionalidade e uma experiência personalizada.</div></div>
+            <div class="definition-item"><div class="definition-term">Dado Pessoal</div><div class="definition-desc">Qualquer informação relacionada a uma pessoa física identificada ou identificável — informações que a identificam de forma direta (nome completo, CPF, RG, fotografia) ou indireta (e-mail, IP, localização).</div></div>
+            <div class="definition-item"><div class="definition-term">Dado Pessoal Sensível</div><div class="definition-desc">Dado que revela aspectos mais íntimos do Titular: dados de saúde, biométricos, orientação religiosa, política e sexual, dado genético, filiação a sindicatos, dentre outros.</div></div>
+            <div class="definition-item"><div class="definition-term">DPO (Data Protection Officer)</div><div class="definition-desc">Encarregado pela proteção de dados. É o responsável legal pela proteção de dados e programa de privacidade perante os órgãos reguladores e governamentais.</div></div>
+            <div class="definition-item"><div class="definition-term">Operador</div><div class="definition-desc">Pessoa física ou jurídica, de direito público ou privado, que realiza o tratamento de Dados Pessoais em nome do controlador.</div></div>
+            <div class="definition-item"><div class="definition-term">Pixels e SDKs</div><div class="definition-desc">Pequenos arquivos ou trechos de códigos oferecidos por serviços como Meta e Google, que, instalados no site, geram indicadores sobre o desempenho da página e possibilitam ao proprietário realizar ajustes para melhorar a experiência dos usuários.</div></div>
+            <div class="definition-item"><div class="definition-term">Titular</div><div class="definition-desc">Pessoa física a quem se referem os dados pessoais: cliente direto da plataforma, representante legal de Pessoa Jurídica cliente, visitantes eventuais de sites ou ambientes físicos, fornecedores ou qualquer outra pessoa física que interaja com a MonBluu.</div></div>
+            <div class="definition-item"><div class="definition-term">Tratamento</div><div class="definition-desc">Toda operação realizada com dados pessoais: coleta, produção, recepção, classificação, utilização, acesso, reprodução, transmissão, distribuição, processamento, arquivamento, armazenamento, eliminação, avaliação ou controle da informação, modificação, comunicação, transferência, difusão ou extração.</div></div>
+        </div>
+    </section>
+
+    <section class="policy-section" id="agentes">
+        <div class="section-header">
+            <div class="section-number">05</div>
+            <h2>Agentes de Tratamento</h2>
+        </div>
+        <p>Em relação aos dados de pessoas com as quais se relaciona diretamente (representantes legais de Clientes, empresas de Contabilidade ou de BPO Financeiro, nossos fornecedores, usuários de nossos sites e plataformas) a MonBluu exercerá a condição de <strong>Controladora de dados</strong>.</p>
+        <p>Em relação aos dados de terceiros inseridos na plataforma pelos Clientes (clientes, fornecedores e demais pessoas relacionadas aos Clientes), a MonBluu exercerá a condição de <strong>Operadora de dados</strong>. Neste caso, o Controlador será o Cliente responsável pela inserção dos dados.</p>
+    </section>
+
+    <section class="policy-section" id="como-tratamos">
+        <div class="section-header">
+            <div class="section-number">06</div>
+            <h2>Como Tratamos Dados Pessoais?</h2>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Quando ocorre</th>
+                        <th>Dados tratados</th>
+                        <th>Finalidades</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Interações com clientes (representantes legais de PJ)</td><td>Nome, Imagem/Selfie, CPF, Endereço, CEP, E-mail, Telefone, Dados de cartão de crédito, Dados de bases públicas, Certificado digital e-CPF</td><td>Identificação e qualificação do Titular; avaliação financeira; concessão de credenciais; utilização das funcionalidades da plataforma; serviços financeiros; prevenção a fraudes; pesquisas de satisfação; cumprimento de obrigações legais e contratuais.</td></tr>
+                    <tr><td>Interações com empresas parceiras (Contabilidade ou BPO Financeiro)</td><td>Nome, CPF, Endereço, Número, CEP, E-mail, Telefone, WhatsApp</td><td>Vinculação de licenças; manutenção de contatos; organização de eventos; gestão do Programa de Parceria MonBluu.</td></tr>
+                    <tr><td>Promoção das atividades da MonBluu</td><td>Nome, E-mail, Telefone, Endereço</td><td>Relacionamento em mídias sociais; envio de campanhas e materiais educativos; captação de leads; organização de eventos.</td></tr>
+                    <tr><td>Espaços físicos da MonBluu</td><td>Nome, CPF, Imagens</td><td>Monitoramento de imagens para segurança; identificação em guaritas e recepções.</td></tr>
+                    <tr><td>Dados de terceiros inseridos por Clientes</td><td>Nome, CPF, Telefone, E-mail, Endereço, Dados bancários</td><td>Garantir o cumprimento do contrato firmado com o cliente, conforme as funcionalidades do plano contratado.</td></tr>
+                    <tr><td>Relacionamentos comerciais com fornecedores</td><td>Nome, E-mail, Endereço, Telefone, Dados bancários</td><td>Negociação e aquisição de produtos e serviços; pagamentos; elaboração de relatórios financeiros; defesa judicial de interesses.</td></tr>
+                    <tr><td>Candidaturas a vagas de emprego</td><td>Nome, CPF, RG, Endereço, Telefone, E-mail, Qualificação profissional, Dados sobre deficiência, Dados de diversidade</td><td>Triagem e contato com candidatos; avaliação curricular; entrevistas; ações de inclusão e diversidade.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="policy-section" id="cookies">
+        <div class="section-header">
+            <div class="section-number">07</div>
+            <h2>Cookies e Tecnologias Similares</h2>
+        </div>
+        <p>Ao utilizar os serviços da MonBluu, poderemos coletar informações sobre os serviços que você utiliza e como os utiliza. Em geral, essas informações são utilizadas para a execução adequada dos serviços, para promover uma experiência personalizada e para implementar melhorias contínuas nas funcionalidades da aplicação.</p>
+        <p><strong>Tipos de informações coletadas:</strong></p>
+        <ul>
+            <li><strong>Geolocalização:</strong> Poderemos coletar informações de localização (via IP ou GPS do dispositivo) para oferecer uma experiência otimizada. Você pode controlar ou desabilitar o uso de serviços de localização no menu de configurações do seu dispositivo.</li>
+            <li><strong>Formas de uso:</strong> Coletamos informações sobre funcionalidades mais utilizadas, alterações realizadas e tempo de uso dos Serviços.</li>
+            <li><strong>Dados de Log:</strong> Coletamos dados de log e informações do dispositivo automaticamente quando você acessa e utiliza os Serviços, ainda que não seja um cliente.</li>
+            <li><strong>Pixels e SDKs:</strong> Terceiros como o Facebook e Google podem usar cookies e tecnologias para coletar informações de nosso site com a finalidade de fornecer serviços de medição e direcionar anúncios. Você pode desativar a coleta editando as configurações de anúncios desses terceiros.</li>
+        </ul>
+        <p>Os cookies passíveis de serem encontrados em nossos sites podem ser gerenciados por meio da ferramenta de gerenciamento de cookies disponível diretamente em nossos sites.</p>
+    </section>
+
+    <section class="policy-section" id="compartilhamento">
+        <div class="section-header">
+            <div class="section-number">08</div>
+            <h2>Compartilhamento</h2>
+        </div>
+        <p>Para viabilizar as funcionalidades de nossos serviços e cumprir obrigações legais, poderá ser necessário compartilhar alguns dados com terceiros. São hipóteses de compartilhamento:</p>
+        <ul>
+            <li>Com plataformas de mídia social (Facebook, Google) para gerar leads e promover nossos serviços;</li>
+            <li>Com instituições financeiras e securitizadoras de crédito, para suporte às funcionalidades da plataforma;</li>
+            <li>Com prestadores de serviço terceirizados (armazenamento em nuvem, emissão de notas fiscais, verificação de identidade, atendimento ao cliente, processamento de pagamentos, etc.);</li>
+            <li>Com empresas parceiras (Contabilidade ou BPO Financeiro), para vinculação da licença do cliente;</li>
+            <li>Com autoridades públicas (fiscais, fazendárias, regulatórias, judiciais e policiais) para cumprimento de obrigações legais;</li>
+            <li>Com empresas terceirizadas em processos de seleção de candidatos a vagas de emprego.</li>
+        </ul>
+        <div class="highlight-box">
+            <span class="icon">✅</span>
+            <p>Em todos os casos de compartilhamentos, supervisionamos os destinatários dos dados e garantimos que estejam aderentes às melhores práticas de segurança e conformidade legal.</p>
+        </div>
+    </section>
+
+    <section class="policy-section" id="seguranca">
+        <div class="section-header">
+            <div class="section-number">09</div>
+            <h2>Segurança das Informações</h2>
+        </div>
+        <p>A MonBluu adota medidas técnicas e administrativas para a proteção da privacidade dos dados dos clientes, utilizando todos os esforços para manter a estrita confidencialidade, integridade e disponibilidade, restritas às pessoas autorizadas.</p>
+        <p>Tanto nosso site quanto o backup de nossos dados estão na <strong>Amazon Web Services (AWS)</strong>, o maior e mais confiável data center do mundo.</p>
+        <p>Adicionalmente, utilizamos as melhores práticas de segurança do mercado: controles de acesso físico e digital, criptografia, medidas contra destruição ou uso ilegal, gestão de vulnerabilidades, tratamento de incidentes e acessos não autorizados.</p>
+    </section>
+
+    <section class="policy-section" id="manutencao">
+        <div class="section-header">
+            <div class="section-number">10</div>
+            <h2>Manutenção dos Dados</h2>
+        </div>
+        <p>Os dados pessoais serão mantidos pela MonBluu ou por terceiros autorizados pelo tempo que forem necessários para o cumprimento de suas finalidades.</p>
+        <p>Para além do tempo necessário, os dados pessoais poderão ser mantidos:</p>
+        <ul>
+            <li>Para atendimento de obrigações legais ou regulatórias (ex.: resoluções específicas do Banco Central do Brasil);</li>
+            <li>Para o atendimento de ordens expedidas por autoridades públicas;</li>
+            <li>Para o atendimento do legítimo interesse da MonBluu, em situações concretas e quando legalmente permitido.</li>
+        </ul>
+    </section>
+
+    <section class="policy-section" id="direitos">
+        <div class="section-header">
+            <div class="section-number">11</div>
+            <h2>Direitos dos Titulares</h2>
+        </div>
+        <p>Os Titulares poderão exercer os seguintes direitos em relação aos seus dados pessoais:</p>
+        <ul>
+            <li>Confirmação da existência de tratamento;</li>
+            <li>Acesso aos seus Dados Pessoais tratados pela MonBluu;</li>
+            <li>Correção de dados incompletos, inexatos ou desatualizados;</li>
+            <li>Anonimização, bloqueio ou eliminação de dados desnecessários, excessivos ou tratados em desconformidade com a LGPD;</li>
+            <li>Portabilidade dos dados a outro fornecedor de serviço ou produto;</li>
+            <li>Eliminação dos Dados Pessoais tratados com seu consentimento;</li>
+            <li>Informação das entidades públicas e privadas com as quais a MonBluu realizou uso compartilhado de dados;</li>
+            <li>Revogação do consentimento (quando o tratamento estiver baseado nessa hipótese legal);</li>
+            <li>Solicitação de revisão de decisões tomadas unicamente com base em tratamento automatizado de Dados Pessoais.</li>
+        </ul>
+        <p>A MonBluu atenderá aos pleitos dos Titulares, mas informa que esses direitos não são absolutos. Algumas situações podem resultar em atendimento parcial ou negativa (por impedimento legal ou regulatório), hipótese em que prestaremos os esclarecimentos necessários.</p>
+        <p>A qualquer momento você poderá cancelar o recebimento de e-mails marketing por meio de links contidos nas próprias mensagens ("unfollow") ou enviando uma solicitação em nosso suporte pelo chat.</p>
+    </section>
+
+    <section class="policy-section" id="atendimento">
+        <div class="section-header">
+            <div class="section-number">12</div>
+            <h2>Atendimento Referente a Dados Pessoais</h2>
+        </div>
+        <p>Para assuntos relacionados ao tratamento de Dados Pessoais, a MonBluu poderá ser contatada na pessoa de seu Encarregado pelo Tratamento de Dados Pessoais (DPO):</p>
+        <div class="dpo-card">
+            <div class="dpo-avatar">OJ</div>
+            <div class="dpo-info">
+                <h3>Osmair de Jesus Ferreira Junior</h3>
+                <p>Data Protection Officer (DPO) — MonBluu</p>
+                <a href="mailto:dpo@monbluu.com.br">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    dpo@monbluu.com.br
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="policy-section" id="orientacoes">
+        <div class="section-header">
+            <div class="section-number">13</div>
+            <h2>Orientações de Segurança aos Titulares</h2>
+        </div>
+        <p>Com alguns cuidados básicos, os Titulares podem contribuir para um relacionamento mais seguro:</p>
+        <ul>
+            <li>Comunique a MonBluu sobre toda e qualquer suspeita ou constatação de violação a esta Política;</li>
+            <li>Forneça à MonBluu informações verdadeiras e completas, e sempre as mantenha atualizadas;</li>
+            <li>Não pague boletos supostamente enviados pela MonBluu sem antes conferir o valor, o código de barras, CNPJ emissor, a instituição financeira e o beneficiário;</li>
+            <li>Mantenha a confidencialidade de suas credenciais de acesso (login e senha);</li>
+            <li>Antes de fornecer dados de cartão de crédito, certifique-se de que está interagindo com a MonBluu pelos canais oficiais;</li>
+            <li>Somente forneça informações de cartão de crédito utilizando os recursos específicos disponíveis em nossa aplicação;</li>
+            <li>Responsabilize-se por todos os dados de terceiros que inserir em nossas plataformas, observando as diretrizes da LGPD.</li>
+        </ul>
+        <p>Por questões de segurança, nos reservamos o direito de suspender ou cancelar a licença do cliente em caso de suspeita ou descumprimento dos Termos e Condições de Uso ou desta Política.</p>
+    </section>
+
+    <section class="policy-section" id="vigencia">
+        <div class="section-header">
+            <div class="section-number">14</div>
+            <h2>Vigência e Validade</h2>
+        </div>
+        <p>Esta Política é revisada anualmente ou sempre que houver mudanças na regulamentação, bem como, nas diretrizes e negócios da organização.</p>
+        <div class="highlight-box">
+            <span class="icon">📅</span>
+            <p>Última revisão: <strong>março de 2026</strong>. Próxima revisão prevista: <strong>março de 2027</strong>.</p>
+        </div>
+    </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+    <p>© 2026 MonBluu — Todos os direitos reservados.</p>
+    <p style="margin-top:8px"><a href="../versao-2.html">Voltar ao site</a> · <a href="mailto:dpo@monbluu.com.br">dpo@monbluu.com.br</a></p>
+</footer>
+
+<script>
+const prog = document.getElementById('prog');
+const btt = document.getElementById('btt');
+window.addEventListener('scroll', () => {
+    const st = window.scrollY, dh = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = (dh > 0 ? (st/dh)*100 : 0)+'%';
+    btt.classList.toggle('show', st > 400);
+}, { passive:true });
+btt.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+</script>
+
+</body>
+</html>
