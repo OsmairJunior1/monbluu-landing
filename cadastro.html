@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar Conta — MonBluu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{font-size:16px;scroll-behavior:smooth;}
+    body{font-family:'Inter',sans-serif;background:#f7f8fc;color:#0f1b35;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;}
+
+    /* ── TOKENS ── */
+    :root{
+      --ink:      #0f1b35;
+      --ink-2:    #3d4f6e;
+      --ink-3:    #6b7c99;
+      --blue:     #1855f4;
+      --blue-lt:  #eef2ff;
+      --blue-md:  #c7d4fd;
+      --green:    #17c964;
+      --green-lt: #e8faf0;
+      --green-dk: #0fa554;
+      --surface:  #f7f8fc;
+      --border:   #e4e9f4;
+      --white:    #ffffff;
+      --r8:8px;--r12:12px;--r16:16px;--r24:24px;
+      --sh-sm: 0 1px 4px rgba(15,27,53,.06),0 4px 16px rgba(15,27,53,.06);
+      --sh-md: 0 4px 8px rgba(15,27,53,.06),0 12px 40px rgba(15,27,53,.1);
+      --t:.22s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* ── HEADER SIMPLES ── */
+    .top-bar{
+      background:rgba(255,255,255,.95);
+      backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      padding:0 24px;
+      height:64px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;top:0;z-index:100;
+      box-shadow:var(--sh-sm);
+    }
+    .top-bar-logo{
+      font-family:'Inter',sans-serif;
+      font-weight:800;
+      font-size:1.35rem;
+      color:var(--ink);
+      display:flex;align-items:center;gap:6px;
+      text-decoration:none;
+    }
+    .top-bar-logo span{color:var(--blue);}
+    .top-bar-logo svg{width:22px;height:22px;}
+    .back-link{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:.875rem;font-weight:500;color:var(--ink-2);
+      text-decoration:none;
+      padding:7px 14px;border-radius:var(--r8);
+      transition:all var(--t);
+      border:1.5px solid var(--border);
+      background:#fff;
+    }
+    .back-link:hover{color:var(--blue);border-color:var(--blue);background:var(--blue-lt);}
+    .back-link svg{width:16px;height:16px;}
+
+    /* ── LAYOUT PRINCIPAL ── */
+    .page-body{
+      flex:1;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:40px 16px 60px;
+      gap:32px;
+    }
+
+    /* ── CARD PRINCIPAL ── */
+    .card{
+      background:#fff;
+      border:1.5px solid var(--border);
+      border-radius:var(--r24);
+      box-shadow:var(--sh-md);
+      padding:40px;
+      width:100%;
+      max-width:480px;
+    }
+    .card-title{
+      font-size:1.6rem;font-weight:800;color:var(--ink);
+      margin-bottom:6px;letter-spacing:-.02em;
+    }
+    .card-sub{font-size:.9rem;color:var(--ink-3);margin-bottom:32px;}
+
+    /* ── RESUMO DO PLANO ── */
+    .plan-summary{
+      background:var(--blue-lt);
+      border:1.5px solid var(--blue-md);
+      border-radius:var(--r12);
+      padding:14px 18px;
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:28px;
+      gap:12px;
+    }
+    .plan-summary-left{display:flex;align-items:center;gap:10px;}
+    .plan-badge{
+      background:var(--blue);color:#fff;
+      font-size:.7rem;font-weight:700;
+      padding:3px 10px;border-radius:100px;
+      text-transform:uppercase;letter-spacing:.05em;
+      white-space:nowrap;
+    }
+    .plan-name{font-weight:700;color:var(--ink);font-size:.95rem;}
+    .plan-period-tag{font-size:.78rem;color:var(--ink-3);margin-top:1px;}
+    .plan-price-wrap{text-align:right;flex-shrink:0;}
+    .plan-curr{font-size:.8rem;font-weight:600;color:var(--ink-2);vertical-align:super;}
+    .plan-amt{font-size:1.5rem;font-weight:800;color:var(--blue);}
+    .plan-per{font-size:.75rem;color:var(--ink-3);}
+    .plan-change{
+      font-size:.78rem;color:var(--blue);font-weight:600;
+      text-decoration:none;display:block;text-align:center;
+      margin-top:-16px;margin-bottom:20px;
+      transition:opacity var(--t);
+    }
+    .plan-change:hover{opacity:.7;}
+
+    /* ── FORM ── */
+    .form-group{margin-bottom:18px;}
+    .form-label{
+      display:block;font-size:.82rem;font-weight:600;
+      color:var(--ink-2);margin-bottom:6px;
+    }
+    .form-input{
+      width:100%;
+      height:46px;
+      padding:0 14px;
+      border:1.5px solid var(--border);
+      border-radius:var(--r8);
+      font-family:'Inter',sans-serif;
+      font-size:.9rem;
+      color:var(--ink);
+      background:#fff;
+      transition:all var(--t);
+      outline:none;
+    }
+    .form-input::placeholder{color:#b0bdd4;}
+    .form-input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(24,85,244,.12);}
+    .form-input:hover:not(:focus){border-color:#b0bdd4;}
+
+    .input-wrap{position:relative;}
+    .input-icon{
+      position:absolute;left:13px;top:50%;transform:translateY(-50%);
+      width:18px;height:18px;color:var(--ink-3);pointer-events:none;
+    }
+    .input-wrap .form-input{padding-left:40px;}
+
+    .input-toggle{
+      position:absolute;right:13px;top:50%;transform:translateY(-50%);
+      background:none;border:none;cursor:pointer;
+      color:var(--ink-3);padding:2px;
+      display:flex;align-items:center;
+      transition:color var(--t);
+    }
+    .input-toggle:hover{color:var(--blue);}
+    .input-toggle svg{width:18px;height:18px;}
+
+    .form-hint{font-size:.76rem;color:var(--ink-3);margin-top:5px;}
+
+    select.form-input{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7c99' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:18px;}
+
+    /* ── DIVISOR ── */
+    .form-divider{
+      display:flex;align-items:center;gap:12px;
+      margin:24px 0;color:var(--ink-3);font-size:.8rem;
+    }
+    .form-divider::before,.form-divider::after{
+      content:'';flex:1;height:1px;background:var(--border);
+    }
+
+    /* ── BOTÕES ── */
+    .btn-full{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      width:100%;height:50px;
+      border:none;border-radius:var(--r12);
+      font-family:'Inter',sans-serif;font-size:.95rem;font-weight:700;
+      cursor:pointer;transition:all var(--t);
+      text-decoration:none;
+      margin-bottom:12px;
+    }
+    .btn-full:last-child{margin-bottom:0;}
+    .btn-full svg{width:20px;height:20px;flex-shrink:0;}
+
+    .btn-blue{
+      background:var(--blue);color:#fff;
+    }
+    .btn-blue:hover{background:#0e42d4;transform:translateY(-1px);box-shadow:0 6px 20px rgba(24,85,244,.35);}
+
+    .btn-green{
+      background:var(--green);color:#fff;
+    }
+    .btn-green:hover{background:var(--green-dk);transform:translateY(-1px);box-shadow:0 6px 20px rgba(23,201,100,.4);}
+
+    /* ── TERMS ── */
+    .terms-note{
+      text-align:center;font-size:.75rem;color:var(--ink-3);
+      margin-top:20px;line-height:1.5;
+    }
+    .terms-note a{color:var(--blue);font-weight:500;text-decoration:none;}
+    .terms-note a:hover{text-decoration:underline;}
+
+    /* ── PAINEL LATERAL ── */
+    .side-panel{
+      width:320px;flex-shrink:0;
+      padding-top:8px;
+    }
+    .side-card{
+      background:#fff;
+      border:1.5px solid var(--border);
+      border-radius:var(--r16);
+      padding:24px;
+      margin-bottom:16px;
+      box-shadow:var(--sh-sm);
+    }
+    .side-card-title{
+      font-size:.82rem;font-weight:700;color:var(--ink-3);
+      text-transform:uppercase;letter-spacing:.06em;
+      margin-bottom:16px;
+    }
+    .trust-item{
+      display:flex;align-items:flex-start;gap:10px;
+      margin-bottom:14px;
+    }
+    .trust-item:last-child{margin-bottom:0;}
+    .trust-icon{
+      width:34px;height:34px;border-radius:var(--r8);
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+    }
+    .trust-icon.blue{background:var(--blue-lt);}
+    .trust-icon.green{background:var(--green-lt);}
+    .trust-icon svg{width:18px;height:18px;}
+    .trust-icon.blue svg{color:var(--blue);}
+    .trust-icon.green svg{color:var(--green-dk);}
+    .trust-text strong{display:block;font-size:.85rem;font-weight:600;color:var(--ink);}
+    .trust-text span{font-size:.78rem;color:var(--ink-3);}
+
+    .feats-list{list-style:none;}
+    .feats-list li{
+      display:flex;align-items:center;gap:8px;
+      font-size:.85rem;color:var(--ink-2);
+      padding:5px 0;
+      border-bottom:1px solid var(--border);
+    }
+    .feats-list li:last-child{border-bottom:none;}
+    .feats-list li svg{width:16px;height:16px;color:var(--green-dk);flex-shrink:0;}
+
+    /* ── ESTADO LOADING ── */
+    .btn-full.loading{opacity:.7;pointer-events:none;}
+    .btn-full.loading::after{
+      content:'';
+      width:18px;height:18px;
+      border:2px solid rgba(255,255,255,.4);
+      border-top-color:#fff;
+      border-radius:50%;
+      animation:spin .7s linear infinite;
+      margin-left:8px;
+    }
+    @keyframes spin{to{transform:rotate(360deg);}}
+
+    /* ── MENSAGEM DE ERRO ── */
+    .msg{
+      display:none;
+      padding:12px 16px;
+      border-radius:var(--r8);
+      font-size:.85rem;font-weight:500;
+      margin-bottom:18px;
+    }
+    .msg.error{background:#fff1f0;border:1px solid #fca5a5;color:#b91c1c;display:flex;align-items:center;gap:8px;}
+    .msg svg{width:16px;height:16px;flex-shrink:0;}
+
+    /* ── RESPONSIVO ── */
+    @media(max-width:860px){
+      .side-panel{display:none;}
+      .page-body{padding:24px 16px 48px;}
+    }
+    @media(max-width:520px){
+      .card{padding:28px 20px;}
+      .card-title{font-size:1.4rem;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="top-bar">
+  <a href="versao-2.html" class="top-bar-logo">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M3 3h8v8H3z" fill="#1855f4"/><path d="M13 3h8v8h-8z" fill="#0f1b35" opacity=".3"/><path d="M3 13h8v8H3z" fill="#0f1b35" opacity=".15"/><path d="M13 13h8v8h-8z" fill="#17c964"/></svg>
+    Mon<span>Bluu</span>
+  </a>
+  <a href="versao-2.html#planos" class="back-link">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    Ver planos
+  </a>
+</header>
+
+<!-- CORPO -->
+<main class="page-body">
+
+  <!-- CARD DE CADASTRO -->
+  <div class="card">
+    <h1 class="card-title">Criar sua conta</h1>
+    <p class="card-sub">Preencha os dados abaixo para ativar seu plano.</p>
+
+    <!-- RESUMO DO PLANO (preenchido via JS) -->
+    <div class="plan-summary" id="planSummary">
+      <div class="plan-summary-left">
+        <div>
+          <div class="plan-name" id="planName">Pró</div>
+          <div class="plan-period-tag" id="planPeriodTag">Cobrado semestralmente</div>
+        </div>
+      </div>
+      <div class="plan-price-wrap">
+        <span class="plan-curr">R$</span><span class="plan-amt" id="planAmt">69</span>
+        <div class="plan-per">/mês</div>
+      </div>
+    </div>
+    <a href="versao-2.html#planos" class="plan-change">↩ Trocar plano</a>
+
+    <!-- MENSAGEM DE ERRO -->
+    <div class="msg error" id="msgError">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <span id="msgErrorText">Preencha todos os campos obrigatórios.</span>
+    </div>
+
+    <!-- FORMULÁRIO -->
+    <form id="registerForm" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="nome">Nome completo *</label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <input class="form-input" type="text" id="nome" name="nome" placeholder="Digite seu nome completo" autocomplete="name" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail *</label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          <input class="form-input" type="email" id="email" name="email" placeholder="seuemail@exemplo.com" autocomplete="email" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="whatsapp">WhatsApp *</label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          <input class="form-input" type="tel" id="whatsapp" name="whatsapp" placeholder="(47) 99999-9999" autocomplete="tel" required>
+        </div>
+        <p class="form-hint">Usado para notificações e suporte via WhatsApp.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="senha">Senha *</label>
+        <div class="input-wrap">
+          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <input class="form-input" type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required>
+          <button type="button" class="input-toggle" id="toggleSenha" aria-label="Mostrar senha">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          </button>
+        </div>
+        <p class="form-hint">Use pelo menos 6 caracteres.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="origem">Como nos conheceu?</label>
+        <select class="form-input" id="origem" name="origem">
+          <option value="" disabled selected>Selecione uma opção</option>
+          <option value="instagram">Instagram</option>
+          <option value="google">Google</option>
+          <option value="indicacao">Indicação de amigo</option>
+          <option value="youtube">YouTube</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="facebook">Facebook</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+
+      <div class="form-divider">ou escolha como pagar</div>
+
+      <!-- BOTÃO CARTÃO -->
+      <button type="submit" class="btn-full btn-blue" id="btnCartao" data-tipo="cartao">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+        Criar conta e pagar com Cartão
+      </button>
+
+      <!-- BOTÃO PIX -->
+      <button type="submit" class="btn-full btn-green" id="btnPix" data-tipo="pix">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.25 13.438l-2.602 2.601a.75.75 0 0 1-1.06 0l-1.767-1.767a1.125 1.125 0 0 0-1.59 0l-1.768 1.767a.75.75 0 0 1-1.06 0L6.75 13.438a.75.75 0 0 1 0-1.06l1.767-1.768a1.125 1.125 0 0 0 0-1.59L6.75 7.252a.75.75 0 0 1 0-1.06l2.601-2.601a.75.75 0 0 1 1.06 0l1.768 1.767a1.125 1.125 0 0 0 1.59 0l1.767-1.767a.75.75 0 0 1 1.06 0l2.602 2.601a.75.75 0 0 1 0 1.06l-1.767 1.768a1.125 1.125 0 0 0 0 1.59l1.767 1.768a.75.75 0 0 1 0 1.059z"/></svg>
+        Criar conta e pagar com PIX
+      </button>
+
+    </form>
+
+    <p class="terms-note">
+      Ao criar sua conta você concorda com os<br>
+      <a href="termos/privacidade.html">Termos de Uso</a> e a <a href="termos/privacidade.html">Política de Privacidade</a> da MonBluu.
+    </p>
+  </div>
+
+  <!-- PAINEL LATERAL -->
+  <aside class="side-panel">
+
+    <div class="side-card">
+      <p class="side-card-title">Por que a MonBluu?</p>
+      <div class="trust-item">
+        <div class="trust-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <div class="trust-text">
+          <strong>Sem burocracia</strong>
+          <span>Configure em minutos e comece a usar hoje mesmo.</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon blue">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
+        <div class="trust-text">
+          <strong>Pagamento seguro</strong>
+          <span>Processado por Asaas. Seus dados estão protegidos.</span>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="trust-text">
+          <strong>Cancele quando quiser</strong>
+          <span>Sem multa, sem burocracia. Acesso até o fim do período.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-card" id="planFeats">
+      <p class="side-card-title">O que está incluído</p>
+      <ul class="feats-list" id="featsList"></ul>
+    </div>
+
+  </aside>
+
+</main>
+
+<script>
+// ── Dados dos planos ──────────────────────────────────────────────
+const PLANS = {
+  basico: {
+    label: 'Básico',
+    semestral: { preco: 49, total: 294,  total_desc: 279.30 },
+    anual:     { preco: 39, total: 468,  total_desc: 444.60 },
+    feats: ['Controle de receitas e despesas','Fluxo de caixa','Relatório mensal','Emissão de orçamentos','Suporte por e-mail']
+  },
+  pro: {
+    label: 'Pró',
+    semestral: { preco: 69, total: 414,  total_desc: 393.30 },
+    anual:     { preco: 55, total: 660,  total_desc: 627.00 },
+    feats: ['Tudo do Básico','Template personalizável','Gestão de clientes','Relatórios avançados','Suporte prioritário']
+  },
+  profissional: {
+    label: 'Profissional',
+    semestral: { preco: 99, total: 594,  total_desc: 564.30 },
+    anual:     { preco: 79, total: 948,  total_desc: 900.60 },
+    feats: ['Tudo do Pró','Importe custos e despesas','Multi-usuário','API de integração','Gerente de conta dedicado']
+  }
+};
+
+// Links do Asaas
+const ASAAS_LINKS = {
+  basico: {
+    semestral: {
+      cartao: 'https://sandbox.asaas.com/c/bycpy2sdvpvcr829',
+      pix:    'https://sandbox.asaas.com/c/iguwsxikdnjol8s8'
+    },
+    anual: {
+      cartao: 'https://sandbox.asaas.com/c/tpmwud01ke1a71cm',
+      pix:    'https://sandbox.asaas.com/c/k7edpeu88c77kesh'
+    }
+  },
+  pro: {
+    semestral: {
+      cartao: 'https://sandbox.asaas.com/c/bv6m3jbzxgevy41n',
+      pix:    'https://sandbox.asaas.com/c/zxotc6egnh81mkj2'
+    },
+    anual: {
+      cartao: 'https://sandbox.asaas.com/c/icgf2rx5fzli7kaw',
+      pix:    'https://sandbox.asaas.com/c/6lvl41qfxvq7y7dt'
+    }
+  },
+  profissional: {
+    semestral: {
+      cartao: 'https://sandbox.asaas.com/c/k1d7edjygtmuih54',
+      pix:    'https://sandbox.asaas.com/c/yzp15z5cqlx0vryu'
+    },
+    anual: {
+      cartao: 'https://sandbox.asaas.com/c/w9izczmjtkstu1fp',
+      pix:    'https://sandbox.asaas.com/c/2wcja7qkjgv5t9jy'
+    }
+  }
+};
+
+// ── Lê params do hash (#plano/periodo) ────────────────────────────
+const hash     = location.hash.replace('#','');
+const hashParts = hash.split('/');
+const planoKey = (hashParts[0] || 'pro').toLowerCase();
+const periodo  = (hashParts[1] || 'semestral').toLowerCase();
+const plano    = PLANS[planoKey] || PLANS['pro'];
+const dados    = plano[periodo] || plano['semestral'];
+
+// ── Preenche resumo ───────────────────────────────────────────────
+document.getElementById('planName').textContent      = plano.label;
+document.getElementById('planAmt').textContent       = dados.preco;
+const totalFmt = dados.total_desc.toFixed(2).replace('.',',');
+document.getElementById('planPeriodTag').textContent =
+  periodo === 'anual'
+    ? `Cobrado anualmente · R$ ${totalFmt} no total`
+    : `Cobrado semestralmente · R$ ${totalFmt} no total`;
+
+// ── Preenche features laterais ────────────────────────────────────
+const ul = document.getElementById('featsList');
+plano.feats.forEach(f => {
+  const li = document.createElement('li');
+  li.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>${f}`;
+  ul.appendChild(li);
+});
+
+// ── Toggle mostrar senha ──────────────────────────────────────────
+document.getElementById('toggleSenha').addEventListener('click', function(){
+  const inp = document.getElementById('senha');
+  const showing = inp.type === 'text';
+  inp.type = showing ? 'password' : 'text';
+  document.getElementById('eyeIcon').innerHTML = showing
+    ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>'
+    : '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+});
+
+// ── Máscara WhatsApp ──────────────────────────────────────────────
+document.getElementById('whatsapp').addEventListener('input', function(){
+  let v = this.value.replace(/\D/g,'').slice(0,11);
+  if(v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+  else if(v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+  else if(v.length > 0) v = `(${v}`;
+  this.value = v;
+});
+
+// ── Validação e submit ────────────────────────────────────────────
+let tipoPagamento = 'cartao';
+
+document.getElementById('btnCartao').addEventListener('click', function(){ tipoPagamento = 'cartao'; });
+document.getElementById('btnPix').addEventListener('click',    function(){ tipoPagamento = 'pix'; });
+
+document.getElementById('registerForm').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  const nome    = document.getElementById('nome').value.trim();
+  const email   = document.getElementById('email').value.trim();
+  const wpp     = document.getElementById('whatsapp').value.trim();
+  const senha   = document.getElementById('senha').value;
+  const msgEl   = document.getElementById('msgError');
+  const msgTxt  = document.getElementById('msgErrorText');
+
+  msgEl.style.display = 'none';
+
+  if(!nome || !email || !wpp || !senha){
+    msgTxt.textContent = 'Preencha todos os campos obrigatórios.';
+    msgEl.style.display = 'flex';
+    return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    msgTxt.textContent = 'Digite um e-mail válido.';
+    msgEl.style.display = 'flex';
+    return;
+  }
+  if(senha.length < 6){
+    msgTxt.textContent = 'A senha precisa ter pelo menos 6 caracteres.';
+    msgEl.style.display = 'flex';
+    return;
+  }
+
+  // Ativa loading no botão clicado
+  const btnAtivo = tipoPagamento === 'cartao'
+    ? document.getElementById('btnCartao')
+    : document.getElementById('btnPix');
+  btnAtivo.classList.add('loading');
+  btnAtivo.textContent = 'Aguarde...';
+
+  // Recupera link do Asaas para o plano/período/tipo
+  const link = (ASAAS_LINKS[planoKey]?.[periodo]?.[tipoPagamento]) || '#';
+
+  // Salva dados localmente (opcional — útil para pré-preencher no sistema)
+  try {
+    sessionStorage.setItem('mb_cadastro', JSON.stringify({
+      nome, email, whatsapp: wpp,
+      plano: planoKey, periodo,
+      origem: document.getElementById('origem').value,
+      tipo_pagamento: tipoPagamento
+    }));
+  } catch(err){}
+
+  // Redireciona para o Asaas após breve delay visual
+  setTimeout(() => { window.location.href = link; }, 800);
+});
+</script>
+
+</body>
+</html>
