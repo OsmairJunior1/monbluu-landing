@@ -1582,5 +1582,53 @@ tilt('.p-card',3);
   tick();
 })();
 </script>
+
+<!-- ════════════════════════════════════════════════
+     COOKIE BANNER
+════════════════════════════════════════════════ -->
+<div id="cookie-banner" role="dialog" aria-label="Aviso de cookies" style="
+  display:none;
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  width:calc(100% - 48px);max-width:620px;
+  background:#fff;border:1px solid #e2e8f0;border-radius:16px;
+  box-shadow:0 8px 40px rgba(0,0,0,.13);
+  padding:24px 28px;z-index:9999;
+  font-family:'Inter',sans-serif;
+">
+  <p style="font-size:.95rem;color:#1a2235;line-height:1.6;margin:0 0 16px">
+    Usamos cookies para melhorar sua experiência e garantir o funcionamento do site.
+    Ao continuar, você concorda com nossa
+    <a href="termos/privacidade.html" style="color:#1855f4;font-weight:600;text-decoration:underline">Política de Privacidade</a>.
+  </p>
+  <div style="display:flex;gap:10px;flex-wrap:wrap">
+    <button id="cookie-accept" style="
+      flex:1;min-width:120px;padding:11px 20px;
+      background:#1855f4;color:#fff;border:none;border-radius:10px;
+      font-size:.9rem;font-weight:600;cursor:pointer;
+    ">Aceitar cookies</button>
+    <button id="cookie-reject" style="
+      flex:1;min-width:120px;padding:11px 20px;
+      background:#f1f5f9;color:#475569;border:1px solid #e2e8f0;border-radius:10px;
+      font-size:.9rem;font-weight:600;cursor:pointer;
+    ">Apenas essenciais</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  if(!localStorage.getItem('cookie_consent')){
+    const banner = document.getElementById('cookie-banner');
+    banner.style.display = 'block';
+    document.getElementById('cookie-accept').onclick = function(){
+      localStorage.setItem('cookie_consent','accepted');
+      banner.style.display = 'none';
+    };
+    document.getElementById('cookie-reject').onclick = function(){
+      localStorage.setItem('cookie_consent','rejected');
+      banner.style.display = 'none';
+    };
+  }
+})();
+</script>
 </body>
 </html>
