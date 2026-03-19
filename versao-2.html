@@ -774,7 +774,7 @@ a{text-decoration:none;}
 <header class="nav" id="nav">
   <div class="nav-inner">
     <a href="#top" class="nav-logo">
-      <img src="logo branca (1).png" alt="MonBluu" id="navLogo">
+      <img src="logo atual.png" alt="MonBluu" id="navLogo">
     </a>
 
     <nav id="mainNav">
@@ -1557,8 +1557,7 @@ const navLogo = document.getElementById('navLogo');
 function updateNav(){
   const stuck = window.scrollY > 40;
   nav.classList.toggle('elevated', stuck);
-  // swap logo filter: white logo needs to be inverted to dark on white bg
-  navLogo.style.filter = 'brightness(0) saturate(100%) invert(13%) sepia(65%) saturate(900%) hue-rotate(200deg) brightness(0.85)';
+  navLogo.style.filter = '';
 }
 updateNav();
 
