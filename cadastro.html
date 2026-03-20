@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
     html{font-size:16px;scroll-behavior:smooth;}
@@ -553,19 +554,28 @@ document.getElementById('whatsapp').addEventListener('input', function(){
   this.value = v;
 });
 
+// ── Supabase ──────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://zcyipbnfejwalygboduf.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpjeWlwYm5mZWp3YWx5Z2JvZHVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMyNDI1NzcsImV4cCI6MjA4ODgxODU3N30._M0pkbO2MzYGIyYOJiPZfecaaFg9pkeNpBACJx39BLk';
+const _sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Mapa planoKey → nome na tabela plans
+const PLAN_NAME_MAP = { basico: 'Básico', pro: 'Pro', profissional: 'Profissional' };
+
 // ── Validação e submit ────────────────────────────────────────────
 let tipoPagamento = 'cartao';
 
 document.getElementById('btnCartao').addEventListener('click', function(){ tipoPagamento = 'cartao'; });
 document.getElementById('btnPix').addEventListener('click',    function(){ tipoPagamento = 'pix'; });
 
-document.getElementById('registerForm').addEventListener('submit', function(e){
+document.getElementById('registerForm').addEventListener('submit', async function(e){
   e.preventDefault();
 
   const nome    = document.getElementById('nome').value.trim();
   const email   = document.getElementById('email').value.trim();
   const wpp     = document.getElementById('whatsapp').value.trim();
   const senha   = document.getElementById('senha').value;
+  const origem  = document.getElementById('origem').value;
   const msgEl   = document.getElementById('msgError');
   const msgTxt  = document.getElementById('msgErrorText');
 
@@ -591,24 +601,53 @@ document.getElementById('registerForm').addEventListener('submit', function(e){
   const btnAtivo = tipoPagamento === 'cartao'
     ? document.getElementById('btnCartao')
     : document.getElementById('btnPix');
-  btnAtivo.classList.add('loading');
+  btnAtivo.disabled = true;
   btnAtivo.textContent = 'Aguarde...';
 
-  // Recupera link do Asaas para o plano/período/tipo
+  // 1. Cria usuário no Supabase Auth
+  const { data: authData, error: authError } = await _sb.auth.signUp({ email, password: senha });
+
+  if(authError){
+    const msg = authError.message.includes('already registered')
+      ? 'Este e-mail já está cadastrado.'
+      : 'Erro ao criar conta: ' + authError.message;
+    msgTxt.textContent = msg;
+    msgEl.style.display = 'flex';
+    btnAtivo.disabled = false;
+    btnAtivo.textContent = tipoPagamento === 'cartao' ? 'Criar conta e pagar com Cartão' : 'Criar conta e pagar com PIX';
+    return;
+  }
+
+  const userId = authData.user.id;
+
+  // 2. Busca o plan_id pelo nome do plano
+  const planName = PLAN_NAME_MAP[planoKey] || 'Básico';
+  const { data: planData } = await _sb.from('plans').select('id').eq('name', planName).single();
+  const planId = planData?.id || null;
+
+  // 3. Insere em user_plans com status 'pending'
+  await _sb.from('user_plans').insert({
+    user_id:  userId,
+    plan_id:  planId,
+    status:   'pending',
+    period:   periodo
+  });
+
+  // 4. Cria perfil inicial
+  await _sb.from('profiles').upsert({
+    user_id:   userId,
+    user_nome: nome,
+    user_tel:  wpp,
+    emp_nome:  '',
+    emp_doc:   '',
+    emp_tel:   '',
+    emp_nicho: '',
+    emp_email: ''
+  }, { onConflict: 'user_id' });
+
+  // 5. Recupera link do Asaas e redireciona
   const link = (ASAAS_LINKS[planoKey]?.[periodo]?.[tipoPagamento]) || '#';
-
-  // Salva dados localmente (opcional — útil para pré-preencher no sistema)
-  try {
-    sessionStorage.setItem('mb_cadastro', JSON.stringify({
-      nome, email, whatsapp: wpp,
-      plano: planoKey, periodo,
-      origem: document.getElementById('origem').value,
-      tipo_pagamento: tipoPagamento
-    }));
-  } catch(err){}
-
-  // Redireciona para o Asaas após breve delay visual
-  setTimeout(() => { window.location.href = link; }, 800);
+  window.location.href = link;
 });
 </script>
 
