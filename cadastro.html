@@ -625,13 +625,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   const { data: planData } = await _sb.from('plans').select('id').eq('name', planName).single();
   const planId = planData?.id || null;
 
-  // 3. Insere em user_plans com status 'pending'
-  await _sb.from('user_plans').insert({
-    user_id:  userId,
-    plan_id:  planId,
-    status:   'pending',
-    period:   periodo
-  });
+  // 3. (user_plans é criado pelo webhook após confirmação do pagamento)
 
   // 4. Cria perfil inicial
   await _sb.from('profiles').upsert({
