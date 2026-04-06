@@ -628,9 +628,8 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 
   // 5. Gera link de pagamento dinâmico via Edge Function (inclui externalReference)
   try {
-    const { data: sessionData } = await _sb.auth.getSession();
-    const token = sessionData?.session?.access_token;
-    if(!token){ throw new Error('Sessão inválida'); }
+    const token = authData.session?.access_token;
+    if(!token){ throw new Error('Sessão inválida — confirme seu e-mail e tente novamente'); }
 
     const billingType = tipoPagamento === 'cartao' ? 'CREDIT_CARD' : 'PIX';
     const resp = await fetch(SUPABASE_URL + '/functions/v1/create-asaas-payment', {
