@@ -628,8 +628,13 @@ document.getElementById('registerForm').addEventListener('submit', async functio
 
   // 5. Gera link de pagamento dinâmico via Edge Function (inclui externalReference)
   try {
-    const token = authData.session?.access_token;
-    if(!token){ throw new Error('Sessão inválida — confirme seu e-mail e tente novamente'); }
+    // Garante token válido: usa sessão do signUp ou faz signIn imediato
+    let token = authData.session?.access_token;
+    if(!token){
+      const { data: signInData, error: signInErr } = await _sb.auth.signInWithPassword({ email, password: senha });
+      if(signInErr || !signInData.session){ throw new Error('Sessão inválida — verifique seu e-mail e tente novamente'); }
+      token = signInData.session.access_token;
+    }
 
     const billingType = tipoPagamento === 'cartao' ? 'CREDIT_CARD' : 'PIX';
     const resp = await fetch(SUPABASE_URL + '/functions/v1/create-asaas-payment', {
@@ -640,7 +645,8 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     const result = await resp.json();
 
     if(!resp.ok || !result.url){
-      throw new Error(result.error || 'Erro ao gerar link de pagamento');
+      console.error('[cadastro] edge function erro:', resp.status, result);
+      throw new Error(result.error || ('HTTP ' + resp.status));
     }
 
     // Valida domínio do link antes de redirecionar
@@ -652,6 +658,7 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     payWin.location.href = result.url;
   } catch(err) {
     payWin && payWin.close();
+    console.error('[cadastro] erro pagamento:', err);
     msgTxt.textContent = err.message || 'Erro ao gerar link de pagamento. Tente novamente.';
     msgEl.style.display = 'flex';
     resetBtn();
