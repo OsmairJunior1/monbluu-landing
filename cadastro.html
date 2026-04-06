@@ -8,7 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.101.1/dist/umd/supabase.js"
+          integrity="sha256-nemRIwEQKZy7uoOYcUFEnleZl6kKX8B3zf4KpR6NVT0="
+          crossorigin="anonymous"></script>
   <style>
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
     html{font-size:16px;scroll-behavior:smooth;}
@@ -476,39 +478,8 @@ const PLANS = {
   }
 };
 
-// Links do Asaas
-const ASAAS_LINKS = {
-  basico: {
-    semestral: {
-      cartao: 'https://sandbox.asaas.com/c/bycpy2sdvpvcr829',
-      pix:    'https://sandbox.asaas.com/c/iguwsxikdnjol8s8'
-    },
-    anual: {
-      cartao: 'https://sandbox.asaas.com/c/tpmwud01ke1a71cm',
-      pix:    'https://sandbox.asaas.com/c/k7edpeu88c77kesh'
-    }
-  },
-  pro: {
-    semestral: {
-      cartao: 'https://sandbox.asaas.com/c/bv6m3jbzxgevy41n',
-      pix:    'https://sandbox.asaas.com/c/zxotc6egnh81mkj2'
-    },
-    anual: {
-      cartao: 'https://sandbox.asaas.com/c/icgf2rx5fzli7kaw',
-      pix:    'https://sandbox.asaas.com/c/6lvl41qfxvq7y7dt'
-    }
-  },
-  profissional: {
-    semestral: {
-      cartao: 'https://sandbox.asaas.com/c/k1d7edjygtmuih54',
-      pix:    'https://sandbox.asaas.com/c/yzp15z5cqlx0vryu'
-    },
-    anual: {
-      cartao: 'https://sandbox.asaas.com/c/w9izczmjtkstu1fp',
-      pix:    'https://sandbox.asaas.com/c/2wcja7qkjgv5t9jy'
-    }
-  }
-};
+// Domínios permitidos para o link de pagamento Asaas
+const ASAAS_ALLOWED = ['sandbox.asaas.com', 'www.asaas.com', 'asaas.com'];
 
 // ── Lê params do hash (#plano/periodo) ────────────────────────────
 const hash     = location.hash.replace('#','');
@@ -597,6 +568,9 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     return;
   }
 
+  // Abre janela de pagamento ANTES de qualquer await (evita bloqueio de popup)
+  const payWin = window.open('about:blank', '_blank');
+
   // Ativa loading no botão clicado
   const btnAtivo = tipoPagamento === 'cartao'
     ? document.getElementById('btnCartao')
@@ -604,17 +578,22 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   btnAtivo.disabled = true;
   btnAtivo.textContent = 'Aguarde...';
 
+  const resetBtn = () => {
+    btnAtivo.disabled = false;
+    btnAtivo.textContent = tipoPagamento === 'cartao' ? 'Criar conta e pagar com Cartão' : 'Criar conta e pagar com PIX';
+  };
+
   // 1. Cria usuário no Supabase Auth
   const { data: authData, error: authError } = await _sb.auth.signUp({ email, password: senha });
 
   if(authError){
+    payWin && payWin.close();
     const msg = authError.message.includes('already registered')
       ? 'Este e-mail já está cadastrado.'
       : 'Erro ao criar conta: ' + authError.message;
     msgTxt.textContent = msg;
     msgEl.style.display = 'flex';
-    btnAtivo.disabled = false;
-    btnAtivo.textContent = tipoPagamento === 'cartao' ? 'Criar conta e pagar com Cartão' : 'Criar conta e pagar com PIX';
+    resetBtn();
     return;
   }
 
@@ -624,6 +603,14 @@ document.getElementById('registerForm').addEventListener('submit', async functio
   const planName = PLAN_NAME_MAP[planoKey] || 'Básico';
   const { data: planData } = await _sb.from('plans').select('id').eq('name', planName).single();
   const planId = planData?.id || null;
+
+  if(!planId){
+    payWin && payWin.close();
+    msgTxt.textContent = 'Plano não encontrado. Tente novamente.';
+    msgEl.style.display = 'flex';
+    resetBtn();
+    return;
+  }
 
   // 3. (user_plans é criado pelo webhook após confirmação do pagamento)
 
@@ -639,9 +626,37 @@ document.getElementById('registerForm').addEventListener('submit', async functio
     emp_email: ''
   }, { onConflict: 'user_id' });
 
-  // 5. Recupera link do Asaas e redireciona
-  const link = (ASAAS_LINKS[planoKey]?.[periodo]?.[tipoPagamento]) || '#';
-  window.location.href = link;
+  // 5. Gera link de pagamento dinâmico via Edge Function (inclui externalReference)
+  try {
+    const { data: sessionData } = await _sb.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if(!token){ throw new Error('Sessão inválida'); }
+
+    const billingType = tipoPagamento === 'cartao' ? 'CREDIT_CARD' : 'PIX';
+    const resp = await fetch(SUPABASE_URL + '/functions/v1/create-asaas-payment', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ planId, billingType })
+    });
+    const result = await resp.json();
+
+    if(!resp.ok || !result.url){
+      throw new Error(result.error || 'Erro ao gerar link de pagamento');
+    }
+
+    // Valida domínio do link antes de redirecionar
+    const parsedUrl = new URL(result.url);
+    if(!ASAAS_ALLOWED.includes(parsedUrl.hostname)){
+      throw new Error('URL de pagamento inválida');
+    }
+
+    payWin.location.href = result.url;
+  } catch(err) {
+    payWin && payWin.close();
+    msgTxt.textContent = err.message || 'Erro ao gerar link de pagamento. Tente novamente.';
+    msgEl.style.display = 'flex';
+    resetBtn();
+  }
 });
 </script>
 
